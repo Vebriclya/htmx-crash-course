@@ -4,7 +4,7 @@ const app = express();
 
 // Set static folder
 app.use(express.static("public"));
-// Parse URL-encoded bodies (as sent by HTML forms)
+// Parse URL-encoded bodies (as sent by HTML forms) - this is what allows you to get fahrenhiet. This is your middleware
 app.use(express.urlencoded({ extended: true }));
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
@@ -31,6 +31,22 @@ app.get("/users", async (req, res) => {
      <ul>
       ${users.map((user) => `<li>${user.name}</li>`).join("")}
      </ul>
+    `);
+  }, 2000);
+});
+
+// Handle POST request for temp conversion
+app.post("/convert", (req, res) => {
+  setTimeout(() => {
+    const fahrenheit = parseFloat(req.body.fahrenheit);
+    const celcius = (fahrenheit - 32) * (5 / 9);
+
+    res.send(`
+    <p>
+        ${fahrenheit} degrees Fahrenheit is equal to ${celcius.toFixed(
+      2
+    )} degrees Celcius
+    </p>
     `);
   }, 2000);
 });
