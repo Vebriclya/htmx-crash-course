@@ -1,4 +1,5 @@
 import express from "express";
+import axios from "axios";
 
 const app = express();
 
@@ -49,6 +50,36 @@ app.post("/convert", (req, res) => {
     </p>
     `);
   }, 2000);
+});
+
+// Handle GET request for polling example
+let counter = 0;
+
+app.get("/poll", (req, res) => {
+  counter++;
+
+  const data = { value: counter };
+  res.json(data);
+});
+
+// Handle GET request for weather
+const apiKey = "5a27d69e27f140f58e7141821230211";
+const location = "Felixstowe";
+app.get("/get-temperature", async (req, res) => {
+  try {
+    const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}`;
+    const response = await axios.get(apiUrl);
+
+    // Extract temperature information from the response
+    const temperatureCelsius = response.data.current.temp_c;
+
+    res.send(
+      `The current temperature in ${location} is ${temperatureCelsius}°C`
+    );
+  } catch (error) {
+    console.error("Error fetching temperature:", error.message);
+    res.status(500).json({ error: "Failed to fetch temperature" });
+  }
 });
 
 // Start the server
