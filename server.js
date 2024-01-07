@@ -17,15 +17,22 @@ app.get("/users", async (req, res) => {
     { id: 3, name: "Shannon Jackson" },
   ]; */
 
-  const response = await fetch("https://jsonplaceholder.typicode.com/users");
-  const users = await response.json();
+  /* The surrounding setTimeout can be removed entirely, it's just to mimic a slow server! */
+  setTimeout(async () => {
+    const limit = +req.query.limit || 10;
 
-  res.send(`
-   <h1 class="text-2xl font-bold my-4">Users</h1>
-   <ul>
-    ${users.map((user) => `<li>${user.name}</li>`).join("")}
-   </ul>
-  `);
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/users?_limit=${limit}`
+    );
+    const users = await response.json();
+
+    res.send(`
+     <h1 class="text-2xl font-bold my-4">Users</h1>
+     <ul>
+      ${users.map((user) => `<li>${user.name}</li>`).join("")}
+     </ul>
+    `);
+  }, 2000);
 });
 
 // Start the server

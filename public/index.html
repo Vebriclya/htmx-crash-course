@@ -18,10 +18,15 @@
       <button
         hx-get="/users"
         hx-target="#users"
+        hx-indicator="#loading"
+        hx-vals='{"limit": 5}'
         class="bg-blue-500 text-white py-2p px-3 my-5 rounded-lg"
       >
         Fetch Users
       </button>
+      <span class="htmx-indicator" id="loading">
+        <img src="img/cdspin.gif" alt="Loading..." class="m-auto h-10" />
+      </span>
       <div id="users"></div>
     </div>
   </body>
